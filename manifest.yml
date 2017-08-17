@@ -1,0 +1,3 @@
+applications:
+- name: demoroom-googlestt-app
+  memory: 128M

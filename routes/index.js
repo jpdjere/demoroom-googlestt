@@ -96,8 +96,8 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
             : `\n\nReached transcription time limit, press Ctrl+C\n`)
             console.log(data);
-            res.render('index', { title: JSON.stringify(data) });
-            //res.send(data);
+            //res.render('index', { title: JSON.stringify(data) });
+            res.send(data.results[0].alternatives[0].transcript);
             // res.send(data.results[0].alternatives[0].transcript);
 
     });
@@ -111,7 +111,7 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
       // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
       verbose: false,
       recordProgram: 'rec', // Try also "arecord" or "sox"
-      silence: '3.0'
+      silence: '0.8'
     })
     .on('error', console.error)
     .pipe(recognizeStream);
