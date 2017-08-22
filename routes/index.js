@@ -95,9 +95,11 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
           (data.results[0] && data.results[0].alternatives[0])
             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
             : `\n\nReached transcription time limit, press Ctrl+C\n`)
+
             console.log(data);
             //res.render('index', { title: JSON.stringify(data) });
-            res.send(data.results[0].alternatives[0].transcript);
+            res.send({transcript:data.results[0].alternatives[0].transcript});
+            recognizeStream.destroy();
             // res.send(data.results[0].alternatives[0].transcript);
 
     });
