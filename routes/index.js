@@ -100,6 +100,10 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
             //res.render('index', { title: JSON.stringify(data) });
             res.send({transcript:data.results[0].alternatives[0].transcript});
             recognizeStream.destroy();
+            setTimeout(function(){
+              record.stop();
+              res.send();
+            },4000)
             // res.send(data.results[0].alternatives[0].transcript);
 
     });
@@ -117,6 +121,8 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
     })
     .on('error', console.error)
     .pipe(recognizeStream);
+
+
 
   console.log('Listening, press Ctrl+C to stop.');
   // [END speech_streaming_mic_recognize]
