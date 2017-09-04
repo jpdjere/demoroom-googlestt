@@ -28,10 +28,17 @@
 var express = require('express');
 var router = express.Router();
 
+let encoding = 'LINEAR16';
+let sampleRateHertz =  16000;
+let languageCode = 'es-AR';
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  streamingMicRecognize (encoding, sampleRateHertz, languageCode, res);
+  //Para Prod
+  streamingMicRecognize(encoding, sampleRateHertz, languageCode, res);
 });
+//Para testing
+// streamingMicRecognize(encoding, sampleRateHertz, languageCode);
 /*
 let encoding = {
   alias: 'e',
@@ -55,10 +62,10 @@ let languageCode = {
   type: 'string'
 }
 */
-let encoding = 'LINEAR16';
-let sampleRateHertz =  16000;
-let languageCode = 'es-AR';
 
+//Para testing
+// function streamingMicRecognize (encoding, sampleRateHertz, languageCode) {
+// para PROD
 function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
   // [START speech_streaming_mic_recognize]
   const record = require('node-record-lpcm16');
@@ -85,7 +92,7 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
       languageCode: languageCode
     },
     interimResults: false, // If you want interim results, set this to true
-    // singleUtterance: true
+    singleUtterance: true
   };
 
   // Create a recognize stream
@@ -99,14 +106,17 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
 
             console.log(data);
             //res.render('index', { title: JSON.stringify(data) });
-            // res.send({transcript:data.results[0].alternatives[0].transcript});
-            res.send({transcript:data.results[0].alternatives[0].transcript});
-            recognizeStream.destroy();
-            // setTimeout(function(){
-            //   record.stop();
-            //   res.send();
-            // },4000)
-            // res.send(data.results[0].alternatives[0].transcript);
+            if(data.speechEventType === 'END_OF_SINGLE_UTTERANCE'){
+
+            }else{
+              res.send({transcript:data.results[0].alternatives[0].transcript});
+              recognizeStream.destroy();
+              setTimeout(function(){
+                record.stop();
+                res.send();
+              },4000)
+
+            }
 
     });
 
