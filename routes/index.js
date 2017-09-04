@@ -84,7 +84,8 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
       sampleRateHertz: sampleRateHertz,
       languageCode: languageCode
     },
-    interimResults: false // If you want interim results, set this to true
+    interimResults: false, // If you want interim results, set this to true
+    // singleUtterance: true
   };
 
   // Create a recognize stream
@@ -98,12 +99,13 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
 
             console.log(data);
             //res.render('index', { title: JSON.stringify(data) });
+            // res.send({transcript:data.results[0].alternatives[0].transcript});
             res.send({transcript:data.results[0].alternatives[0].transcript});
             recognizeStream.destroy();
-            setTimeout(function(){
-              record.stop();
-              res.send();
-            },4000)
+            // setTimeout(function(){
+            //   record.stop();
+            //   res.send();
+            // },4000)
             // res.send(data.results[0].alternatives[0].transcript);
 
     });
@@ -117,7 +119,7 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode, res) {
       // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
       verbose: false,
       recordProgram: 'rec', // Try also "arecord" or "sox"
-      silence: '0.8'
+      silence: '0.1'
     })
     .on('error', console.error)
     .pipe(recognizeStream);
